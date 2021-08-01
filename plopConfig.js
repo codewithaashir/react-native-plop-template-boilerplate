@@ -9,6 +9,9 @@ module.exports = {
       this.switch_break = false;
       return options.fn(this);
     });
+    plop.setHelper('upperCase', function (text) {
+      return text.toUpperCase();
+    });
     plop.setHelper('case', function (value, options) {
       if (value === this.switch_value) {
         this.switch_break = true;
