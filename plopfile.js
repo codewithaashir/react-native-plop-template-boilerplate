@@ -163,7 +163,8 @@ module.exports = plop => {
         type: 'append',
         path: 'src/services/index.ts',
         pattern: '/* PLOP_INJECT_IMPORT */',
-        template: "import {{camelCase name}}{{camelCase type}} from './{{camelCase name}}';",
+        template:
+          "import {{camelCase name}}{{camelCase type}} from './{{camelCase name}}';",
       },
       {
         type: 'append',
@@ -208,6 +209,58 @@ module.exports = plop => {
         path: 'src/hooks/index.ts',
         pattern: '/* PLOP_INJECT_EXPORT */',
         template: '\t{{camelCase name}},',
+      },
+    ],
+  });
+  plop.setGenerator('reducer', {
+    desrciption: 'Create reducer',
+    prompts: [
+      {
+        type: 'input',
+        name: 'name',
+        message: 'What is your reducer name?',
+      },
+    ],
+    actions: [
+      '------------------------------',
+      'Generating a new reducer...',
+      '------------------------------',
+      {
+        type: 'add',
+        path: 'src/store/{{camelCase name}}/types.ts',
+        templateFile:
+          'plop-templates/Store/StoreModule/StoreModule.types.ts.hbs',
+      },
+      {
+        type: 'add',
+        path: 'src/store/{{camelCase name}}/action.ts',
+        templateFile:
+          'plop-templates/Store/StoreModule/StoreModule.action.ts.hbs',
+      },
+      {
+        type: 'add',
+        path: 'src/store/{{camelCase name}}/reducer.ts',
+        templateFile:
+          'plop-templates/Store/StoreModule/StoreModule.reducer.ts.hbs',
+      },
+      {
+        type: 'add',
+        path: 'src/store/index.ts',
+        templateFile: 'plop-templates/Store/injectable-index.ts.hbs',
+        skipIfExists: true,
+      },
+      {
+        type: 'append',
+        path: 'src/store/index.ts',
+        pattern: '/* PLOP_INJECT_IMPORT */',
+        template:
+          "import {{pascalCase name}}Reducer from './{{camelCase name}}/reducer';",
+      },
+      {
+        type: 'append',
+        path: 'src/store/index.ts',
+        pattern: '/* PLOP_IMPORT_USE */',
+        template: '\t{{pascalCase name}}Reducer,',
       },
     ],
   });
