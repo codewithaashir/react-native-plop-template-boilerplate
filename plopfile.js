@@ -1,9 +1,16 @@
+/* eslint-disable prettier/prettier */
 const plopConfig = require('./plopConfig');
-
+const path = require("path");
+const isCorrectExtension = value => {
+  return value => {
+    if (!(['ts','tsx','js','jsx']).includes(value)) return `\n${value} is not a correct extension please try to use \n1-js\n2-ts\n3-jsx\n4-tsx`;
+    return true
+  }
+}
 module.exports = plop => {
   plopConfig.helpers(plop);
   plop.setGenerator('component', {
-    desrciption: 'Create a component',
+    description: 'Create a component',
     // User input prompts provided as arguments to the template
     prompts: [
       {
@@ -14,6 +21,14 @@ module.exports = plop => {
         // Prompt to display on command line
         message: 'What is your component name?',
       },
+      {
+        type: 'input',
+        name: 'extension',
+        message: 'Select the extension',
+        validate: isCorrectExtension('extension'),
+        // default: plopConfig.defaultExtensionType,
+        // choices: () => plopConfig.availableExtensions('*'),
+      },
     ],
     actions: [
       '------------------------------',
@@ -23,47 +38,47 @@ module.exports = plop => {
         // Add a new file
         type: 'add',
         // Path for the new file
-        path: 'src/components//{{pascalCase name}}/{{pascalCase name}}.tsx',
+        path: 'src/components//{{pascalCase name}}/{{pascalCase name}}.{{extension}}',
         // Handlebars template used to generate content of new file
-        templateFile: 'plop-templates/Component/Component.tsx.hbs',
+        templateFile: 'plop-templates/Component/Component.hbs',
       },
       {
         type: 'add',
-        path: 'src/components/{{pascalCase name}}/{{pascalCase name}}.test.ts',
-        templateFile: 'plop-templates/Component/Component.test.ts.hbs',
+        path: 'src/components/{{pascalCase name}}/{{pascalCase name}}.test.{{extensionSplit extension}}',
+        templateFile: 'plop-templates/Component/Component.test.hbs',
       },
       {
         type: 'add',
-        path: 'src/components/{{pascalCase name}}/{{pascalCase name}}.styles.ts',
-        templateFile: 'plop-templates/Component/Component.styles.ts.hbs',
+        path:'src/components/{{pascalCase name}}/{{pascalCase name}}.styles.{{extensionSplit extension}}',
+        templateFile: 'plop-templates/Component/Component.styles.hbs',
       },
       {
         type: 'add',
-        path: 'src/components/{{pascalCase name}}/index.ts',
-        templateFile: 'plop-templates/Component/index.ts.hbs',
+        path:'src/components/{{pascalCase name}}/index.{{extensionSplit extension}}',
+        templateFile: 'plop-templates/Component/index.hbs',
       },
       {
         type: 'add',
-        path: 'src/components/index.ts',
-        templateFile: 'plop-templates/injectable-index.ts.hbs',
+        path:'src/components/index.{{extensionSplit extension}}',
+        templateFile: 'plop-templates/injectable-index.hbs',
         skipIfExists: true,
       },
       {
         type: 'append',
-        path: 'src/components/index.ts',
+        path:'src/components/index.{{extensionSplit extension}}',
         pattern: '/* PLOP_INJECT_IMPORT */',
         template: "import {{pascalCase name}} from './{{pascalCase name}}';",
       },
       {
         type: 'append',
-        path: 'src/components/index.ts',
+        path:'src/components/index.{{extensionSplit extension}}',
         pattern: '/* PLOP_INJECT_EXPORT */',
         template: '\t{{pascalCase name}},',
       },
     ],
   });
   plop.setGenerator('page', {
-    desrciption: 'Create a Page',
+    description: 'Create a Page',
     // User input prompts provided as arguments to the template
     prompts: [
       {
@@ -74,6 +89,12 @@ module.exports = plop => {
         // Prompt to display on command line
         message: 'What is your Page name?',
       },
+      {
+        type: 'input',
+        name: 'extension',
+        message: 'Select the extension',
+        validate: isCorrectExtension('extension'),
+      },
     ],
     actions: [
       '------------------------------',
@@ -83,47 +104,47 @@ module.exports = plop => {
         // Add a new file
         type: 'add',
         // Path for the new file
-        path: 'src/pages/{{pascalCase name}}/{{pascalCase name}}.tsx',
+        path: 'src/pages/{{pascalCase name}}/{{pascalCase name}}.{{extension}}',
         // Handlebars template used to generate content of new file
-        templateFile: 'plop-templates/Page/Page.tsx.hbs',
+        templateFile: 'plop-templates/Page/Page.hbs',
       },
       {
         type: 'add',
-        path: 'src/pages/{{pascalCase name}}/{{pascalCase name}}.test.ts',
-        templateFile: 'plop-templates/Page/Page.test.ts.hbs',
+        path: 'src/pages/{{pascalCase name}}/{{pascalCase name}}.test.{{extensionSplit extension}}',
+        templateFile: 'plop-templates/Page/Page.test.hbs',
       },
       {
         type: 'add',
-        path: 'src/pages/{{pascalCase name}}/{{pascalCase name}}.styles.ts',
-        templateFile: 'plop-templates/Page/Page.styles.ts.hbs',
+        path: 'src/pages/{{pascalCase name}}/{{pascalCase name}}.styles.{{extensionSplit extension}}',
+        templateFile: 'plop-templates/Page/Page.styles.hbs',
       },
       {
         type: 'add',
-        path: 'src/pages/{{pascalCase name}}/index.ts',
-        templateFile: 'plop-templates/Page/index.ts.hbs',
+        path: 'src/pages/{{pascalCase name}}/index.{{extensionSplit extension}}',
+        templateFile: 'plop-templates/Page/index.hbs',
       },
       {
         type: 'add',
-        path: 'src/pages/index.ts',
-        templateFile: 'plop-templates/injectable-index.ts.hbs',
+        path: 'src/pages/index.{{extensionSplit extension}}',
+        templateFile: 'plop-templates/injectable-index.hbs',
         skipIfExists: true,
       },
       {
         type: 'append',
-        path: 'src/pages/index.ts',
+        path: 'src/pages/index.{{extensionSplit extension}}',
         pattern: '/* PLOP_INJECT_IMPORT */',
         template: "import {{pascalCase name}} from './{{pascalCase name}}';",
       },
       {
         type: 'append',
-        path: 'src/pages/index.ts',
+        path: 'src/pages/index.{{extensionSplit extension}}',
         pattern: '/* PLOP_INJECT_EXPORT */',
         template: '\t{{pascalCase name}},',
       },
     ],
   });
   plop.setGenerator('service', {
-    desrciption: 'Create service',
+    description: 'Create service',
     prompts: [
       {
         type: 'input',
@@ -135,6 +156,12 @@ module.exports = plop => {
         name: 'isParams',
         default: false,
         message: 'Do you want to use Params inside your service?',
+      },
+      {
+        type: 'input',
+        name: 'extension',
+        message: 'Select the extension',
+        validate: isCorrectExtension('extension'),
       },
       {
         type: 'list',
@@ -150,37 +177,43 @@ module.exports = plop => {
       '------------------------------',
       {
         type: 'add',
-        path: 'src/services/{{camelCase name}}.ts',
-        templateFile: 'plop-templates/service.ts.hbs',
+        path: 'src/services/{{camelCase name}}.{{extension}}',
+        templateFile: 'plop-templates/service.hbs',
       },
       {
         type: 'add',
-        path: 'src/services/index.ts',
-        templateFile: 'plop-templates/injectable-index.ts.hbs',
+        path: 'src/services/index.{{extension}}',
+        templateFile: 'plop-templates/injectable-index.hbs',
         skipIfExists: true,
       },
       {
         type: 'append',
-        path: 'src/services/index.ts',
+        path: 'src/services/index.{{extension}}',
         pattern: '/* PLOP_INJECT_IMPORT */',
         template:
           "import {{camelCase name}}{{camelCase type}} from './{{camelCase name}}';",
       },
       {
         type: 'append',
-        path: 'src/services/index.ts',
+        path: 'src/services/index.{{extension}}',
         pattern: '/* PLOP_INJECT_EXPORT */',
         template: '\t{{camelCase name}}{{camelCase type}},',
       },
     ],
   });
   plop.setGenerator('hook', {
-    desrciption: 'Create Hook',
+    description: 'Create Hook',
     prompts: [
       {
         type: 'input',
         name: 'name',
         message: 'What is your hook name?',
+      },
+      {
+        type: 'input',
+        name: 'extension',
+        message: 'Select the extension',
+        validate: isCorrectExtension('extension'),
       },
     ],
     actions: [
@@ -189,36 +222,42 @@ module.exports = plop => {
       '------------------------------',
       {
         type: 'add',
-        path: 'src/hooks/{{camelCase name}}.ts',
-        templateFile: 'plop-templates/hook.ts.hbs',
+        path: 'src/hooks/{{camelCase name}}.{{extension}}',
+        templateFile: 'plop-templates/hook.hbs',
       },
       {
         type: 'add',
-        path: 'src/hooks/index.ts',
-        templateFile: 'plop-templates/injectable-index.ts.hbs',
+        path: 'src/hooks/index.{{extension}}',
+        templateFile: 'plop-templates/injectable-index.hbs',
         skipIfExists: true,
       },
       {
         type: 'append',
-        path: 'src/hooks/index.ts',
+        path: 'src/hooks/index.{{extension}}',
         pattern: '/* PLOP_INJECT_IMPORT */',
         template: "import {{camelCase name}} from './{{camelCase name}}';",
       },
       {
         type: 'append',
-        path: 'src/hooks/index.ts',
+        path: 'src/hooks/index.{{extension}}',
         pattern: '/* PLOP_INJECT_EXPORT */',
         template: '\t{{camelCase name}},',
       },
     ],
   });
   plop.setGenerator('reducer', {
-    desrciption: 'Create reducer',
+    description: 'Create reducer',
     prompts: [
       {
         type: 'input',
         name: 'name',
         message: 'What is your reducer name?',
+      },
+      {
+        type: 'input',
+        name: 'extension',
+        message: 'Select the extension',
+        validate: isCorrectExtension('extension'),
       },
     ],
     actions: [
@@ -227,38 +266,38 @@ module.exports = plop => {
       '------------------------------',
       {
         type: 'add',
-        path: 'src/store/{{camelCase name}}/types.ts',
+        path: 'src/store/{{camelCase name}}/types.{{extension}}',
         templateFile:
-          'plop-templates/Store/StoreModule/StoreModule.types.ts.hbs',
+          'plop-templates/Store/StoreModule/StoreModule.types.hbs',
       },
       {
         type: 'add',
-        path: 'src/store/{{camelCase name}}/action.ts',
+        path: 'src/store/{{camelCase name}}/action.{{extension}}',
         templateFile:
-          'plop-templates/Store/StoreModule/StoreModule.action.ts.hbs',
+          'plop-templates/Store/StoreModule/StoreModule.action.hbs',
       },
       {
         type: 'add',
-        path: 'src/store/{{camelCase name}}/reducer.ts',
+        path: 'src/store/{{camelCase name}}/reducer.{{extension}}',
         templateFile:
-          'plop-templates/Store/StoreModule/StoreModule.reducer.ts.hbs',
+          'plop-templates/Store/StoreModule/StoreModule.reducer.hbs',
       },
       {
         type: 'add',
-        path: 'src/store/index.ts',
-        templateFile: 'plop-templates/Store/injectable-index.ts.hbs',
+        path: 'src/store/index.{{extension}}',
+        templateFile: 'plop-templates/Store/injectable-index.hbs',
         skipIfExists: true,
       },
       {
         type: 'append',
-        path: 'src/store/index.ts',
+        path: 'src/store/index.{{extension}}',
         pattern: '/* PLOP_INJECT_IMPORT */',
         template:
           "import {{pascalCase name}}Reducer from './{{camelCase name}}/reducer';",
       },
       {
         type: 'append',
-        path: 'src/store/index.ts',
+        path: 'src/store/index.{{extension}}',
         pattern: '/* PLOP_IMPORT_USE */',
         template: '\t{{pascalCase name}}Reducer,',
       },
